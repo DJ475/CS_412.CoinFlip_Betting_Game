@@ -50,6 +50,7 @@ public class Controller {
 
                 // tree map is container for users input, used to pass action being done as well as users bet amount
                 treeMapBet.put("GAMEPLAY_BET",userInputBet);
+                treeMapBet.put("GUESS",guessCoinFlip);
 
                 try
                 {
