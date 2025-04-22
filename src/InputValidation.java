@@ -115,4 +115,11 @@ public class InputValidation {
     {
         return dataClean.replaceAll("[\\[\\]]","");
     }
+
+    // Source: https://www.geeksforgeeks.org/how-to-remove-all-white-spaces-from-a-string-in-java/#
+    // Using this source we were able to strip all whitespace from strings to prevent issues with parsing and keep usernames consistent for authentication
+    String stripWhiteSpaces(String stringCheckValid)
+    {
+        return stringCheckValid.strip().replaceAll("\\s","");
+    }
 }
