@@ -63,7 +63,15 @@ public class ViewGameplay {
         Component spaceAreaVert1 = Box.createRigidArea(new Dimension(20, 10));
         betPanel.add(spaceAreaVert1);
         betPanel.add(betOptionsSelect, "South");
-        this.pictureLabel = new JLabel(new ImageIcon(picture));
+        try
+        {
+            this.pictureLabel = new JLabel(new ImageIcon(picture));
+        }
+        catch (Exception e)
+        {
+            System.out.println("Image Icon Not Found: " + e.getMessage());
+            this.pictureLabel = new JLabel("Image Not Found ");
+        }
         outcomePanel.add(this.pictureLabel);
         Component spaceAreaVert3 = Box.createRigidArea(new Dimension(20, 10));
         outcomePanel.add(spaceAreaVert3);
