@@ -33,7 +33,7 @@ public class Server {
             try {
                 while(true) {
                     Socket clientConnectionSoc = ss.accept();
-                    Thread th = new Thread(new ClientHandler(clientConnectionSoc));
+                    Thread th = new Thread(new ClientHandler(clientConnectionSoc,userModelVar));
                     th.start();
                 }
             } catch (IOException e) {
