@@ -1,4 +1,6 @@
 
+import com.sun.source.tree.Tree;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -9,14 +11,17 @@ import java.net.Socket;
 import java.util.TreeMap;
 
 public class Controller {
-    Socket socket = null;
-    View view;
+    private Socket socket = null;
+    private View view;
 
     private String chosenOptionH_T = "";
 
-    ObjectOutputStream objSendServer;
+    private ObjectOutputStream objSendServer;
+
+    private TreeMap<String, String> treeMapSendData;
 
     public Controller(View view) {
+        treeMapSendData = new TreeMap<>();
         this.view = view;
         view.InitializeUI();
 
@@ -35,6 +40,8 @@ public class Controller {
 
         view.getGameplayView().setActionListenerButtonBet(new ActionBet());
         view.getGameplayView().setBetOptionsListener(new ActionSelectOptions());
+        view.getLoginView().setActionListenerButtonLogin(new ActionListenerLogin());
+        view.getCreateView().setActionListenerButtonCreate(new ActionListenerCreate());
     }
 
     public class ActionBet implements ActionListener {
@@ -43,20 +50,20 @@ public class Controller {
 
         public void actionPerformed(ActionEvent e) {
             if (Controller.this.socket != null) {
+                treeMapSendData = new TreeMap<>();
                 String userInputBet = view.getGameplayView().getTextFBetAmount().getText();
                 String guessCoinFlip = chosenOptionH_T;
 
-                TreeMap<String, String> treeMapBet = new TreeMap<>();
-
                 // tree map is container for users input, used to pass action being done as well as users bet amount
-                treeMapBet.put("GAMEPLAY_BET",userInputBet);
-                treeMapBet.put("GUESS",guessCoinFlip);
+                treeMapSendData.put("GAMEPLAY_BET",userInputBet);
+                treeMapSendData.put("GUESS",guessCoinFlip);
 
                 try
                 {
                     // Source: https://www.comrevo.com/2019/07/Sending-objects-over-sockets-Java-example-How-to-send-serialized-object-over-network-in-Java.html
                     // Using this source I was able to send the key and value pair over socket
-                    objSendServer.writeObject(treeMapBet);
+                    objSendServer.writeObject(treeMapSendData);
+                    treeMapSendData.clear();
                 }
                 catch (IOException ex)
                 {
@@ -75,6 +82,62 @@ public class Controller {
                 JList listSelection = view.getGameplayView().getBetOptionsJlist();
                 chosenOptionH_T = listSelection.getSelectedValue().toString();
                 System.out.println("Value Selected is: " + chosenOptionH_T);
+            }
+        }
+    }
+
+    public class ActionListenerCreate implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            treeMapSendData = new TreeMap<>();
+            String usernameCreate = view.getCreateView().getUsernameEntry().getText();
+            String passwordCreate = view.getCreateView().getPasswordEntry().getText();
+
+            treeMapSendData.put("CREATE_ACCOUNT",usernameCreate);
+            treeMapSendData.put("PASSWORD",passwordCreate);
+
+            try {
+                objSendServer.writeObject(treeMapSendData);
+            }
+            catch (NullPointerException npe)
+            {
+                System.out.println("ERROR Server Request: " + npe.getMessage());
+            }
+            catch (IOException ex)
+            {
+                System.out.println("Invalid Entry");
+            }
+            finally {
+                treeMapSendData.clear();
+            }
+        }
+    }
+
+    public class ActionListenerLogin implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            treeMapSendData = new TreeMap<>();
+            String usernameLogin = view.getLoginView().getUsernameEntry().getText();
+            String passwordLogin = view.getLoginView().getPasswordEntry().getText();
+            treeMapSendData.put("LOGIN_USER",usernameLogin);
+            treeMapSendData.put("PASSWORD",passwordLogin);
+
+            try
+            {
+                objSendServer.writeObject(treeMapSendData);
+            }
+            catch (IOException ex)
+            {
+                System.out.println("Error In Login Stage Please try Again: " + ex.getMessage());
+            }
+            catch (NullPointerException npe)
+            {
+                System.out.println("ERROR Server Request: " + npe.getMessage());
+            }
+            finally {
+                treeMapSendData.clear();
             }
         }
     }
