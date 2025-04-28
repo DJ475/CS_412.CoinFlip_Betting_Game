@@ -19,17 +19,8 @@ public class ViewLogin {
     private JTextField usernameEntry;
     private JTextField passwordEntry;
 
-    public JTextField getUsernameEntry() {
-        return this.usernameEntry;
-    }
-
-    public JTextField getPasswordEntry() {
-        return this.passwordEntry;
-    }
-
     ViewLogin() {
         this.buttonLogin = new JButton("Login");
-        this.buttonCreate = new JButton("Create Account");
         this.loginLabel = new JLabel("Login To Your Account or Select Create Account");
         this.usernameLabel = new JLabel("Username");
         this.passwordLabel = new JLabel("Password");
@@ -54,7 +45,6 @@ public class ViewLogin {
         textEntry.add(passwordEntry, BorderLayout.CENTER);
 
         //add items to our second jpanel (login and create button)
-        buttonEntry.add(buttonCreate, BorderLayout.SOUTH);
         buttonEntry.add(buttonLogin, BorderLayout.SOUTH);
 
         //panel container to hold our 2 main panels
@@ -67,11 +57,15 @@ public class ViewLogin {
         return panelContainer;
     }
 
-    public void setActionListenerButtonCreate(ActionListener al) {
-        this.buttonCreate.addActionListener(al);
-    }
-
     public void setActionListenerButtonLogin(ActionListener al) {
         this.buttonLogin.addActionListener(al);
+    }
+
+    public JTextField getUsernameEntry() {
+        return this.usernameEntry;
+    }
+
+    public JTextField getPasswordEntry() {
+        return this.passwordEntry;
     }
 }
