@@ -10,7 +10,7 @@ public class InputValidation {
     public void setUsernameCreate(String usernameCreate) {
         // Source: https://www.jrebel.com/blog/java-regular-expressions-cheat-sheet
         // Source to look for letters and numbers in strings as well as not allow spaces between usernames
-        if (usernameCreate.matches("[a-zA-z\\d]+") && !usernameCreate.matches("\\s+") && !usernameCreate.isBlank())
+        if (usernameCreate.matches("[a-zA-z\\d_*&^%$#@!?<>~:;/,.|+-]+") && !usernameCreate.matches("\\s+") && !usernameCreate.isBlank())
         {
             this.usernameCreate = usernameCreate;
         }
@@ -37,7 +37,7 @@ public class InputValidation {
     }
 
     public void setUsernameLogin(String usernameLogin) {
-        if (usernameLogin.matches("[a-zA-Z\\d]+") && !usernameLogin.matches("\\s+") && !usernameLogin.isBlank())
+        if (usernameLogin.matches("[a-zA-Z\\d_*&^%$#@!?<>~:;/,.|+-]+") && !usernameLogin.matches("\\s+") && !usernameLogin.isBlank())
         {
             this.usernameLogin = usernameLogin;
         }
