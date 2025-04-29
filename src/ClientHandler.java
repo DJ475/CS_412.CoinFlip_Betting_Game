@@ -31,8 +31,6 @@ public class ClientHandler implements Runnable {
 
                 String[] valuesArray = objectData.values().toArray(new String[0]);
 
-
-
                 InputValidation inputValidationVariable = new InputValidation();
 
                 System.out.println("Action Being Done is now: " + objectData.firstKey());
