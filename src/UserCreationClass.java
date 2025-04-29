@@ -1,9 +1,7 @@
 import java.sql.SQLException;
 
 public class UserCreationClass {
-    private User u;
-
-    public void createUser(InputValidation inputValidationVariable, String[] valuesArray, UserModel userModelVar) throws SQLException {
+    public void createUser(InputValidation inputValidationVariable, String[] valuesArray, UserModel userModelVar, User u) throws SQLException {
         System.out.println("Creating Account Now");
         inputValidationVariable.setUsernameCreate(valuesArray[0]);
         inputValidationVariable.setPasswordCreate(valuesArray[1]);
