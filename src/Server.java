@@ -2,12 +2,19 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.TreeMap;
 
 public class Server {
     private static int port_number = 5000;
     private static ServerSocket ss = null;
 
     private static UserModel userModelVar;
+
+    private static TreeMap<String,User> usersLoggedIn = new TreeMap<>();
+
+    public static TreeMap<String, User> getUsersLoggedIn() {
+        return usersLoggedIn;
+    }
 
     public static void main(String[] args) {
         try
@@ -30,13 +37,17 @@ public class Server {
         }
 
         if (ss != null) {
-            try {
-                while(true) {
+            try
+            {
+                while(true)
+                {
                     Socket clientConnectionSoc = ss.accept();
                     Thread th = new Thread(new ClientHandler(clientConnectionSoc,userModelVar));
                     th.start();
                 }
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 System.out.println("Error With Connection: " + e.getMessage());
             }
         }
