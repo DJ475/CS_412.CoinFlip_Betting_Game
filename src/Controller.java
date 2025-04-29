@@ -54,6 +54,8 @@ public class Controller {
                 String userInputBet = view.getGameplayView().getTextFBetAmount().getText();
                 String guessCoinFlip = chosenOptionH_T;
 
+
+
                 // tree map is container for users input, used to pass action being done as well as users bet amount
                 treeMapSendData.put("GAMEPLAY_BET",userInputBet);
                 treeMapSendData.put("GUESS",guessCoinFlip);
@@ -91,6 +93,16 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             treeMapSendData = new TreeMap<>();
+            view.getJtabs().setSelectedIndex(3);
+
+            view.getJtabs().setSelectedIndex(3); // change login tab
+            // disable create tabe
+            view.getJtabs().setEnabledAt(0,false);
+            view.getJtabs().setEnabledAt(1,false);
+            view.getJtabs().setEnabledAt(2,false);
+            view.getJtabs().setEnabledAt(3,true);
+
+
             String usernameCreate = view.getCreateView().getUsernameEntry().getText();
             String passwordCreate = view.getCreateView().getPasswordEntry().getText();
 
@@ -118,9 +130,17 @@ public class Controller {
     {
         @Override
         public void actionPerformed(ActionEvent e) {
+            view.getJtabs().setSelectedIndex(0);
+            view.getJtabs().setEnabledAt(0,true);
+            view.getJtabs().setEnabledAt(1,true);
+            view.getJtabs().setEnabledAt(2,true);
+            view.getJtabs().setEnabledAt(3,true);
+
             treeMapSendData = new TreeMap<>();
             String usernameLogin = view.getLoginView().getUsernameEntry().getText();
             String passwordLogin = view.getLoginView().getPasswordEntry().getText();
+
+
             treeMapSendData.put("LOGIN_USER",usernameLogin);
             treeMapSendData.put("PASSWORD",passwordLogin);
 
@@ -135,6 +155,7 @@ public class Controller {
             catch (NullPointerException npe)
             {
                 System.out.println("ERROR Server Request: " + npe.getMessage());
+                System.out.println("Please make sure the server is connected");
             }
             finally {
                 treeMapSendData.clear();
