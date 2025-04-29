@@ -8,10 +8,11 @@ public class ClientHandler implements Runnable {
     UserModel usermodelVar;
     ObjectInputStream objectSent = null;
 
+    String loggedInUser = "";
+
     public ClientHandler(Socket clientConnectionSoc, UserModel userModelVar) {
         this.currentClientSocket = clientConnectionSoc;
         this.usermodelVar = userModelVar;
-
     }
 
     public void run() {
@@ -21,15 +22,22 @@ public class ClientHandler implements Runnable {
 
         try {
             objectSent = new ObjectInputStream(currentClientSocket.getInputStream());
+
             while(true) {
                 TreeMap<String, String> objectData = (TreeMap<String, String>) objectSent.readObject();
                 String key = objectData.firstKey();
+
+
+
                 String[] valuesArray = objectData.values().toArray(new String[0]);
+
+
 
                 InputValidation inputValidationVariable = new InputValidation();
 
                 System.out.println("Action Being Done is now: " + objectData.firstKey());
                 prwBack = new PrintWriter(currentClientSocket.getOutputStream(),true);
+
 
                 if(valuesArray.length == 2)
                 {
@@ -37,18 +45,36 @@ public class ClientHandler implements Runnable {
                     {
                         case "GAMEPLAY_BET"->
                         {
-                            GameplayClass gc = new GameplayClass();
-                            gc.playUserGame(inputValidationVariable,valuesArray,prwBack);
+                            synchronized(usermodelVar)
+                            {
+                                GameplayClass gc = new GameplayClass();
+                                System.out.println("Gameplay user is now: " + loggedInUser);
+                                gc.playUserGame(inputValidationVariable,valuesArray,prwBack,usermodelVar,loggedInUser);
+                            }
                         }
                         case "CREATE_ACCOUNT"->
                         {
-                            UserCreationClass ucc = new UserCreationClass();
-                            ucc.createUser(inputValidationVariable,valuesArray,usermodelVar);
+                            User u = new User(valuesArray[0],valuesArray[1], 0.00);
+                            String username = u.getUsername();
+
+                            synchronized (usermodelVar)
+                            {
+                                UserCreationClass ucc = new UserCreationClass();
+                                ucc.createUser(inputValidationVariable,valuesArray,usermodelVar,u);
+                            }
                         }
                         case "LOGIN_USER"->
                         {
-                            UserLoginClass ulc = new UserLoginClass();
-                            ulc.loginUser(inputValidationVariable,valuesArray,usermodelVar);
+                            User u = new User(valuesArray[0],valuesArray[1], 0.00);
+                            synchronized (usermodelVar)
+                            {
+                                UserLoginClass ulc = new UserLoginClass();
+                                ulc.loginUser(inputValidationVariable,valuesArray,usermodelVar, u);
+                            }
+                            this.loggedInUser = u.getUsername();
+
+//                            System.out.println("Logged in user is now: "+ this.loggedInUser);
+
                         }
                         case "LEADERBOARD"->
                         {
