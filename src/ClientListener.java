@@ -44,7 +44,6 @@ public class ClientListener implements Runnable{
             } catch (IOException e) {
                 System.out.println();
             }
-            System.out.println(serverResponse);
         }
     }
 }
