@@ -4,12 +4,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class UserModel {
-    private Connection conn;
+    private static Connection conn;
+
+    public UserModel() throws SQLException {
+        conn = DBConnection.getConnection();
+    }
 
     public void createUserTable() throws SQLException {
-        conn = DBConnection.getConnection();
         String createTable = "CREATE TABLE IF NOT EXISTS User (" +
                 "id INTEGER PRIMARY KEY," +
                 "username VARCHAR UNIQUE NOT NULL," +
@@ -18,11 +22,9 @@ public class UserModel {
                 ");";
         PreparedStatement statementPrep = conn.prepareStatement(createTable);
         statementPrep.execute();
-        DBConnection.closeConnection();
     }
 
     public void insertUserTable(User userOBJ) throws SQLException {
-        conn = DBConnection.getConnection();
         String insertString = "INSERT INTO User(username,password,earnings) VALUES(?,?,?);";
         // hashing passwords in java using bcrypt library
         PreparedStatement statement = conn.prepareStatement(insertString);
@@ -31,12 +33,26 @@ public class UserModel {
         statement.setString(2,cipherPassword);
         statement.setDouble(3,userOBJ.getEarnings());
         statement.executeUpdate();
-        DBConnection.closeConnection();
     }
 
-    public void updateUserTable(double earnings) throws SQLException {
-        conn = DBConnection.getConnection();
-        DBConnection.closeConnection();
+    public void updateUserTable(String username,double earnings) throws SQLException {
+        String selectUserEarnings = "SELECT earnings FROM User WHERE username = ? LIMIT 1;";
+        PreparedStatement stmntSelectEarnings = conn.prepareStatement(selectUserEarnings);
+        stmntSelectEarnings.setString(1,username);
+        ResultSet rsEarningsUser = stmntSelectEarnings.executeQuery();
+        if(rsEarningsUser.next())
+        {
+            // get earnings for user
+            double earningsDB = rsEarningsUser.getDouble("earnings");
+            // update thier earnings in database with bet amount(this can be positive or negative, depending on if they guessed correctly)
+            double updatedEarnings = earningsDB+earnings;
+            String updateString = "UPDATE User SET earnings = ? WHERE username = ?;";
+            PreparedStatement stmntUpdate = conn.prepareStatement(updateString);
+            stmntUpdate.setDouble(1,updatedEarnings);
+            stmntUpdate.setString(2,username);
+            stmntUpdate.executeUpdate();
+        }
+
     }
 
 //    public void deleteUserTable()
@@ -45,7 +61,6 @@ public class UserModel {
 //    }
 
     public boolean checkUserAuth(String username, String password) throws SQLException {
-        conn = DBConnection.getConnection();
         String selectSpecifc = "SELECT password from User WHERE username = ? LIMIT 1;";
         PreparedStatement stmnt = conn.prepareStatement(selectSpecifc);
         stmnt.setString(1,username);
