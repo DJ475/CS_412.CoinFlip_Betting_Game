@@ -22,6 +22,14 @@ public class View {
         this.frameMain.add(this.jtabs);
         this.frameMain.setSize(600, 600);
         this.frameMain.setVisible(true);
+        jtabs.setSelectedIndex(3);
+        jtabs.setEnabledAt(0,false);
+        jtabs.setEnabledAt(1,false);
+
+    }
+
+    public JTabbedPane getJtabs() {
+        return jtabs;
     }
 
     public ViewLeaderboard getLeaderBoardView() {
@@ -39,6 +47,4 @@ public class View {
     public ViewCreate getCreateView() {
         return this.createView;
     }
-
 }
-
