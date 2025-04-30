@@ -32,6 +32,8 @@ public class GameplayClass {
                         usermodelVar.updateUserTable(loggedInUser, -doubleValue);
                     }
                 }
+
+                prwBack.println("Earnings: " + usermodelVar.selectUserEarnings(loggedInUser));
             }
             else
             {
