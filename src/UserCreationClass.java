@@ -19,7 +19,7 @@ public class UserCreationClass {
                     userModelVar.insertUserTable(u);
                 }
             } catch (SQLException e) {
-                System.out.println("ERROR HERE");
+                System.out.println("ERROR When Creating New User: " + e.getMessage());
             }
         }
         else
