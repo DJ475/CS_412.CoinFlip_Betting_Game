@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class UserModel {
     private static Connection conn;
@@ -55,10 +54,22 @@ public class UserModel {
 
     }
 
-//    public void deleteUserTable()
-//    {
-//
-//    }
+    public String selectUserEarnings(String username) throws SQLException {
+        String selectUserEarnings = "SELECT earnings FROM User WHERE username = ? LIMIT 1;";
+        PreparedStatement stmntSelect = conn.prepareStatement(selectUserEarnings);
+        System.out.println("Username passed int function is now: " + username);
+        stmntSelect.setString(1,username);
+        ResultSet rsSelect = stmntSelect.executeQuery();
+        if(rsSelect.next())
+        {
+            Double Earnings = rsSelect.getDouble("earnings");
+            return String.valueOf(Earnings);
+        }
+        else
+        {
+            return null;
+        }
+    }
 
     public boolean checkUserAuth(String username, String password) throws SQLException {
         String selectSpecifc = "SELECT password from User WHERE username = ? LIMIT 1;";
