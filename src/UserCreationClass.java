@@ -11,7 +11,16 @@ public class UserCreationClass {
 
 //                                System.out.println("New user is: " + valuesArray[0]);
 //                                System.out.println("Password is: " + valuesArray[1]);
-            userModelVar.insertUserTable(u);
+
+            try
+            {
+                synchronized (Server.class)
+                {
+                    userModelVar.insertUserTable(u);
+                }
+            } catch (SQLException e) {
+                System.out.println("ERROR HERE");
+            }
         }
         else
         {
