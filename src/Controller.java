@@ -2,12 +2,15 @@
 import com.sun.source.tree.Tree;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class Controller {
@@ -42,6 +45,8 @@ public class Controller {
         view.getGameplayView().setBetOptionsListener(new ActionSelectOptions());
         view.getLoginView().setActionListenerButtonLogin(new ActionListenerLogin());
         view.getCreateView().setActionListenerButtonCreate(new ActionListenerCreate());
+        view.getJtabs().addChangeListener(new ActionChangeTab());
+
     }
 
     public class ActionBet implements ActionListener {
@@ -159,6 +164,51 @@ public class Controller {
             }
             finally {
                 treeMapSendData.clear();
+            }
+        }
+    }
+
+    public class ActionChangeTab implements ChangeListener
+    {
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            // Source: http://www.java2s.com/Tutorial/Java/0240__Swing/ListeningforSelectedTabChanges.htm
+            // Using this source to be able to see if they switch to the leaderboard tab to send a request to the server to get the leaderboard.
+            JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();
+            int index = sourceTabbedPane.getSelectedIndex();
+            System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
+
+
+                switch (sourceTabbedPane.getTitleAt(index))
+                {
+                    case "Play"->
+                    {
+                        System.out.println("Sending LeaderBoard Request");
+                        TreeMap<String, String> treeMapLeaderboard = new TreeMap<>();
+
+                        treeMapLeaderboard.put("LEADERBOARD","");
+                        treeMapLeaderboard.put("REQUEST","");
+
+                        try {
+                            objSendServer.writeObject(treeMapLeaderboard);
+                        } catch (IOException ex) {
+                            System.out.println("Error Asking for LEADERBOARD");
+                        }
+                    }
+                    case "Leaderboard"->
+                    {
+                        TreeMap<String, String> treeMapLeaderboard = new TreeMap<>();
+
+                        treeMapLeaderboard.put("LEADERBOARD","");
+                        treeMapLeaderboard.put("REQUEST","");
+
+                        try {
+                            objSendServer.writeObject(treeMapLeaderboard);
+                        } catch (IOException ex) {
+                            System.out.println("Error Asking for LEADERBOARD");
+                        }
+                    }
+
             }
         }
     }
