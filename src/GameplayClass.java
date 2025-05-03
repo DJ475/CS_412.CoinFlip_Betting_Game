@@ -1,8 +1,10 @@
-import java.io.PrintWriter;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 
 public class GameplayClass {
-    public void playUserGame(InputValidation inputValidationVariable, String[] valuesArray, PrintWriter prwBack, UserModel usermodelVar, String loggedInUser) throws SQLException {
+    public void playUserGame(InputValidation inputValidationVariable, String[] valuesArray, ObjectOutputStream objWrBack, UserModel usermodelVar, String loggedInUser) throws SQLException, IOException {
+
         if(Server.getUsersLoggedIn().containsKey(loggedInUser))
         {
 //            System.out.println("Outcome is: " + new CoinFlip().CoinFlipLogic());
@@ -17,7 +19,7 @@ public class GameplayClass {
                 CoinFlip cf = new CoinFlip();
                 if(cf.CoinFlipLogic().equals(guessValue))
                 {
-                    prwBack.println("Guessed Correctly");
+                    objWrBack.writeObject(new MessageClass("OUTCOME","Guessed Correctly"));
                     synchronized (usermodelVar)
                     {
                         usermodelVar.updateUserTable(loggedInUser, Double.parseDouble(betAmount));
@@ -25,7 +27,7 @@ public class GameplayClass {
                 }
                 else
                 {
-                    prwBack.println("Guess Incorrect");
+                    objWrBack.writeObject(new MessageClass("OUTCOME","Guess Incorrect"));
                     synchronized (usermodelVar)
                     {
                         double doubleValue = Double.parseDouble(betAmount);
@@ -33,16 +35,16 @@ public class GameplayClass {
                     }
                 }
 
-                prwBack.println("Earnings: " + usermodelVar.selectUserEarnings(loggedInUser));
+                objWrBack.writeObject(new MessageClass("EARNINGS",usermodelVar.selectUserEarnings(loggedInUser)));
             }
             else
             {
-                prwBack.println("Bet Values Invalid: (The Bet Amount Must Be a Positive Integer/Decimal, Must select Heads or Tails to continue");
+                objWrBack.writeObject(new MessageClass("ERROR_BET:","Bet Values Invalid: (The Bet Amount Must Be a Positive Integer/Decimal, Must select Heads or Tails to continue"));
             }
         }
         else
         {
-            prwBack.println("User Not Logged in");
+            objWrBack.writeObject("ERROR_LOGIN: " + "User Not Logged in");
         }
     }
 }
