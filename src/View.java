@@ -1,7 +1,5 @@
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
-import javax.swing.event.ChangeListener;
-import java.sql.SQLException;
 
 public class View {
     private JFrame frameMain = new JFrame();
@@ -10,6 +8,7 @@ public class View {
     private ViewGameplay gameplayView = new ViewGameplay();
     private ViewCreate createView = new ViewCreate();
     private ViewLogin loginView = new ViewLogin();
+    private ViewDiceroll viewDiceroll = new ViewDiceroll();
 
     public View()
     {
@@ -17,7 +16,8 @@ public class View {
     }
 
     public void InitializeUI() {
-        this.jtabs.add("Play", this.gameplayView.MakeGameplay());
+        this.jtabs.add("Play Coin flip", this.gameplayView.MakeGameplay());
+        this.jtabs.add("Play Dice", this.viewDiceroll.MakeDiceroll());
         this.jtabs.add("Leaderboard", this.leaderBoardView.MakeLeaderboard());
         this.jtabs.add("Create", this.createView.MakeCreate());
         this.jtabs.add("Login", this.loginView.MakeLogin());
@@ -34,13 +34,16 @@ public class View {
         return jtabs;
     }
 
-
     public ViewLeaderboard getLeaderBoardView() {
         return this.leaderBoardView;
     }
 
     public ViewGameplay getGameplayView() {
         return this.gameplayView;
+    }
+
+    public ViewDiceroll getViewDiceroll() {
+        return this.viewDiceroll;
     }
 
     public ViewLogin getLoginView() {
@@ -50,9 +53,5 @@ public class View {
     public ViewCreate getCreateView() {
         return this.createView;
     }
-
-    public void setListenerJtabs(ChangeListener changeListenerTab)
-    {
-        jtabs.addChangeListener(changeListenerTab);
-    }
 }
+
