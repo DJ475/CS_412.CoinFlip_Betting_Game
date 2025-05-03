@@ -1,5 +1,7 @@
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeListener;
+import java.sql.SQLException;
 
 public class View {
     private JFrame frameMain = new JFrame();
@@ -32,6 +34,7 @@ public class View {
         return jtabs;
     }
 
+
     public ViewLeaderboard getLeaderBoardView() {
         return this.leaderBoardView;
     }
@@ -46,5 +49,10 @@ public class View {
 
     public ViewCreate getCreateView() {
         return this.createView;
+    }
+
+    public void setListenerJtabs(ChangeListener changeListenerTab)
+    {
+        jtabs.addChangeListener(changeListenerTab);
     }
 }
