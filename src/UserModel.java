@@ -9,7 +9,7 @@ public class UserModel {
     private static Connection conn;
 
     public UserModel() throws SQLException {
-        conn = DBConnection.getConnection();
+            conn = DBConnection.getConnection();
     }
 
     public void createUserTable() throws SQLException {
@@ -80,7 +80,7 @@ public class UserModel {
         if(rs.next())
         {
             String passwordDB = rs.getString("password");
-            System.out.println("Password in db is: " + passwordDB);
+//            System.out.println("Password in db is: " + passwordDB);
             if(BCrypt.checkpw(password, passwordDB))
             {
                 return true;
