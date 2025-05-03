@@ -6,27 +6,35 @@ import java.util.TreeMap;
 public class ClientHandler implements Runnable {
     Socket currentClientSocket;
     UserModel usermodelVar;
-    ObjectInputStream objectSent = null;
+    ObjectInputStream objectInputStreamVar = null;
+    ObjectOutputStream objectOutStreamVar = null;
 
     String loggedInUser = "";
 
     public ClientHandler(Socket clientConnectionSoc, UserModel userModelVar) {
         this.currentClientSocket = clientConnectionSoc;
         this.usermodelVar = userModelVar;
+
+        try
+        {
+            objectInputStreamVar = new ObjectInputStream(currentClientSocket.getInputStream());
+            objectOutStreamVar = new ObjectOutputStream(currentClientSocket.getOutputStream());
+        }
+        catch (IOException e)
+        {
+            System.out.println("ERROR getting object: " + e.getMessage());
+        }
     }
 
     public void run() {
         System.out.println("New Client Thread: " + String.valueOf(Thread.currentThread()));
 
-        PrintWriter prwBack = null;
-
         try {
-            objectSent = new ObjectInputStream(currentClientSocket.getInputStream());
+
 
             while(true) {
-                TreeMap<String, String> objectData = (TreeMap<String, String>) objectSent.readObject();
+                TreeMap<String, String> objectData = (TreeMap<String, String>) objectInputStreamVar.readObject();
                 String key = objectData.firstKey();
-
 
 
                 String[] valuesArray = objectData.values().toArray(new String[0]);
@@ -34,7 +42,7 @@ public class ClientHandler implements Runnable {
                 InputValidation inputValidationVariable = new InputValidation();
 
                 System.out.println("Action Being Done is now: " + objectData.firstKey());
-                prwBack = new PrintWriter(currentClientSocket.getOutputStream(),true);
+//                prwBack = new PrintWriter(currentClientSocket.getOutputStream(),true);
 
 
                 if(valuesArray.length == 2)
@@ -47,7 +55,7 @@ public class ClientHandler implements Runnable {
                             {
                                 GameplayClass gc = new GameplayClass();
                                 System.out.println("Gameplay user is now: " + loggedInUser);
-                                gc.playUserGame(inputValidationVariable,valuesArray,prwBack,usermodelVar,loggedInUser);
+                                gc.playUserGame(inputValidationVariable,valuesArray, objectOutStreamVar,usermodelVar,loggedInUser);
                             }
                         }
                         case "CREATE_ACCOUNT"->
@@ -76,13 +84,18 @@ public class ClientHandler implements Runnable {
                         }
                         case "LEADERBOARD"->
                         {
-                            LeaderboardActionClass lac = new LeaderboardActionClass();
+//                            System.out.println("Request Received for Leaderboard");
+                            synchronized (usermodelVar)
+                            {
+                                LeaderboardActionClass lac = new LeaderboardActionClass(currentClientSocket,objectOutStreamVar);
+                                lac.leaderboardAction();
+                            }
                         }
                     }
                 }
                 else
                 {
-                    prwBack.println("Invalid Input Received, Please Try Again");
+                    objectOutStreamVar.writeObject(new MessageClass("ERROR_INPUT_PARSING","Invalid Input Received, Please Try Again"));
                 }
             }
         }
