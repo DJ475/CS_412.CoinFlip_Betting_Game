@@ -9,6 +9,7 @@ public class Server {
     private static ServerSocket ss = null;
 
     private static UserModel userModelVar;
+    private static LeaderBoardModel leaderBoardModelVar;
 
     private static TreeMap<String,User> usersLoggedIn = new TreeMap<>();
 
@@ -20,8 +21,10 @@ public class Server {
         try
         {
             userModelVar = new UserModel();
+            leaderBoardModelVar = new LeaderBoardModel();
             System.out.println("Creating user table");
             userModelVar.createUserTable();
+            leaderBoardModelVar.createUserTable();
         }
         catch (SQLException e)
         {
