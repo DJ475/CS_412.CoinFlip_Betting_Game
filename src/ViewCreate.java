@@ -19,10 +19,13 @@ public class ViewCreate {
     private JTextField usernameEntry;
     private JTextField passwordEntry;
 
+    private JLabel createStatusLabel;
 
     ViewCreate() {
         this.buttonCreate = new JButton("Create Account");
+        this.buttonLogin = new JButton("Already Have An Account?: Login Instead");
         this.createLabel = new JLabel("Create Your Account or Select Login");
+        this.createStatusLabel = new JLabel();
         this.usernameLabel = new JLabel("Username");
         this.passwordLabel = new JLabel("Password");
         this.textEntry = new JPanel();
@@ -39,7 +42,8 @@ public class ViewCreate {
         buttonEntry.setLayout(new BoxLayout(buttonEntry, 1));
 
         //add our items to our first Jpanel
-        textEntry.add(createLabel, BorderLayout.NORTH);
+        textEntry.add(createLabel, BorderLayout.SOUTH);
+        textEntry.add(createStatusLabel, BorderLayout.NORTH);
         textEntry.add(usernameLabel, BorderLayout.CENTER);
         textEntry.add(usernameEntry, BorderLayout.CENTER);
         textEntry.add(passwordLabel, BorderLayout.CENTER);
@@ -47,6 +51,7 @@ public class ViewCreate {
 
         //add items to our second jpanel (login and create button)
         buttonEntry.add(buttonCreate, BorderLayout.SOUTH);
+        buttonEntry.add(buttonLogin,BorderLayout.NORTH);
 
         //panel container to hold our 2 main panels
         panelContainer.add(textEntry, BorderLayout.NORTH);
@@ -58,9 +63,6 @@ public class ViewCreate {
         return panelContainer;
     }
 
-    public void setActionListenerButtonCreate(ActionListener al) {
-        this.buttonCreate.addActionListener(al);
-    }
 
     public JTextField getUsernameEntry() {
         return this.usernameEntry;
@@ -69,4 +71,18 @@ public class ViewCreate {
     public JTextField getPasswordEntry() {
         return this.passwordEntry;
     }
+
+    public JLabel getCreateStatusLabel() {
+        return createStatusLabel;
+    }
+
+    public void setActionListenerButtonCreate(ActionListener al) {
+        this.buttonCreate.addActionListener(al);
+    }
+
+    public void setActionListenerButtonLogin(ActionListener al) {
+        this.buttonLogin.addActionListener(al);
+    }
+
+
 }
