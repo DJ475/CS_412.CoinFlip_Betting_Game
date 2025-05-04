@@ -17,9 +17,10 @@ public class GameplayClass {
                 System.out.println("Value 1: " + valuesArray[0] +  " Value 2: " + valuesArray[1]);
                 System.out.println("Gameplay Mechanic Activated");
                 CoinFlip cf = new CoinFlip();
-                if(cf.CoinFlipLogic().equals(guessValue))
+                String resultFlip = cf.CoinFlipLogic();
+                if(resultFlip.equals(guessValue))
                 {
-                    objWrBack.writeObject(new MessageClass("OUTCOME","Guessed Correctly"));
+                    objWrBack.writeObject(new MessageClass("OUTCOME_COIN","Guessed Correctly, Its " + resultFlip));
                     synchronized (usermodelVar)
                     {
                         usermodelVar.updateUserTable(loggedInUser, Double.parseDouble(betAmount));
@@ -27,7 +28,7 @@ public class GameplayClass {
                 }
                 else
                 {
-                    objWrBack.writeObject(new MessageClass("OUTCOME","Guess Incorrect"));
+                    objWrBack.writeObject(new MessageClass("OUTCOME_COIN","Guess Incorrect, It Was " + resultFlip));
                     synchronized (usermodelVar)
                     {
                         double doubleValue = Double.parseDouble(betAmount);
@@ -35,16 +36,16 @@ public class GameplayClass {
                     }
                 }
 
-                objWrBack.writeObject(new MessageClass("EARNINGS",usermodelVar.selectUserEarnings(loggedInUser)));
+                objWrBack.writeObject(new MessageClass("EARNINGS_COIN",usermodelVar.selectUserEarnings(loggedInUser)));
             }
             else
             {
-                objWrBack.writeObject(new MessageClass("ERROR_BET:","Bet Values Invalid: (The Bet Amount Must Be a Positive Integer/Decimal, Must select Heads or Tails to continue"));
+                objWrBack.writeObject(new MessageClass("ERROR_BET_COIN:","Bet Values Invalid: (The Bet Amount Must Be a Positive Integer/Decimal, Must select Heads or Tails to continue"));
             }
         }
         else
         {
-            objWrBack.writeObject("ERROR_LOGIN: " + "User Not Logged in");
+            objWrBack.writeObject(new MessageClass("ERROR_LOGIN: ","User Not Logged in"));
         }
     }
 }
