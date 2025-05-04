@@ -1,6 +1,4 @@
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.TextField;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -18,21 +16,19 @@ import javax.swing.event.ListSelectionListener;
 public class ViewDiceroll {
     private JButton buttonBet = new JButton("Place Bet Now");
     private BufferedImage picture;
-    TextField textFBetAmount;
-    TextField textResult;
-    TextField textEarnings;
-    JLabel pictureLabel;
+    private TextField textFBetAmount;
+    private TextField textResult;
+    private TextField textEarnings;
+    private JLabel pictureLabel;
 
     private final String[] diceOptions = new String[]{"one", "two", "three", "four", "five", "six"};
-    JList<String> betOptionsSelect;
+    private JList<String> betOptionsSelect;
 
-    public TextField getTextFBetAmount() {
-        return this.textFBetAmount;
-    }
+    private JButton buttonChange;
+    private JButton buttonSeeLeaderboard;
 
     ViewDiceroll() {
         try {
-            // Source: https://stackoverflow.com/questions/4871051/how-to-get-the-current-working-directory-in-java
             //  System.getProperty("user.dir") allows the retrieving of the current working
             //  directory path.
             //  Setting Default image to be heads inside jlabel
@@ -45,6 +41,8 @@ public class ViewDiceroll {
         this.textFBetAmount = new TextField(15);
         this.textResult = new TextField(15);
         this.textEarnings = new TextField(15);
+        this.buttonChange = new JButton("Play COINFLIP?");
+        this.buttonSeeLeaderboard = new JButton("SEE LEADERBOARD");
     }
 
     public JPanel MakeDiceroll() {
@@ -79,6 +77,12 @@ public class ViewDiceroll {
         Component spaceAreaVert2 = Box.createRigidArea(new Dimension(20, 10));
         outcomePanel.add(spaceAreaVert2);
         outcomePanel.add(this.textEarnings);
+        Component spaceAreaVert4 = Box.createRigidArea(new Dimension(20, 10));
+        outcomePanel.add(spaceAreaVert4);
+        outcomePanel.add(buttonChange);
+        Component spaceAreaVert5 = Box.createRigidArea(new Dimension(20, 10));
+        outcomePanel.add(spaceAreaVert5);
+        outcomePanel.add(buttonSeeLeaderboard, BorderLayout.CENTER);
         this.buttonBet.setPreferredSize(new Dimension(250, 50));
         buttonPanel.add(this.buttonBet, "South");
         panelContainer.add(betPanel, "West");
@@ -120,5 +124,31 @@ public class ViewDiceroll {
 
     public void setActionListenerButtonBet(ActionListener al) {
         this.buttonBet.addActionListener(al);
+    }
+
+    public TextField getTextResult() {
+        return textResult;
+    }
+
+    public TextField getTextEarnings() {
+        return textEarnings;
+    }
+
+    public TextField getTextFBetAmount() {
+        return this.textFBetAmount;
+    }
+
+    public void setActionListenerChangeGame(ActionListener alChangeGame) {
+        this.buttonChange.addActionListener(alChangeGame);
+    }
+
+    public void setALButtonSeeLeaderboard2(ActionListener alLeaderboard) {
+        this.buttonSeeLeaderboard.addActionListener(alLeaderboard);
+    }
+
+    public void clearText() {
+        this.textFBetAmount.setText("");
+        this.textResult.setText("");
+        this.textEarnings.setText("");
     }
 }
