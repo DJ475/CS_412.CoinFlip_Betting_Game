@@ -1,8 +1,6 @@
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
+import java.awt.*;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +16,8 @@ public class ClientListener implements Runnable {
 
     ObjectInputStream objectInputStream;
 
+    private CardLayout cardOBJ;
+
     private MessageClass mc;
 
     public ClientListener(Socket connectionListen, View view) throws IOException {
@@ -26,6 +26,7 @@ public class ClientListener implements Runnable {
         this.view = view;
         objectInputStream = new ObjectInputStream(listeningSocket.getInputStream());
         mc = new MessageClass();
+        cardOBJ = view.getCardLayoutOBJ();
     }
 
     @Override
@@ -79,62 +80,98 @@ public class ClientListener implements Runnable {
                         System.out.println("Message Found");
                         MessageClass Message = (MessageClass) readInObj;
                         System.out.println(Message.toString());
+
+                        // this looks for 4 colons and skips them in parsing the value sent from the server
+                        int valueMessageIndex = Message.toString().indexOf("::::")+4; // this lets our program know its a message from server
+
+                        if(Message.toString().startsWith("ERROR_BET_COIN"))
+                        {
+                            view.getGameplayView().getTextResult().setText(Message.toString().substring(valueMessageIndex));
+                        }
+                        if(Message.toString().startsWith("ERROR_BET_DICE"))
+                        {
+                            view.getViewDiceroll().getTextResult().setText(Message.toString().substring(valueMessageIndex));
+                        }
+                        if(Message.toString().startsWith("LOGIN_SUCCESS"))
+                        {
+                            cardOBJ.show(view.getCardsDeck(),"COINFLIP_VIEW");
+                        }
+                        if(Message.toString().startsWith("EARNINGS_COIN"))
+                        {
+                            if(valueMessageIndex!=-1 && !Message.toString().isEmpty())
+                            {
+                                view.getGameplayView().getTextEarnings().setText(Message.toString().substring(valueMessageIndex));
+                            }
+                        }
+                        if(Message.toString().startsWith("EARNINGS_DICE"))
+                        {
+                            if(valueMessageIndex!=-1 && !Message.toString().isEmpty())
+                            {
+                                view.getViewDiceroll().getTextEarnings().setText(Message.toString().substring(valueMessageIndex));
+                            }
+                        }
+                        if(Message.toString().startsWith("ERROR_LOGIN"))
+                        {
+                            view.getLoginView().getLoginStatusLabel().setText("ERROR LOGIN:" + Message.toString().substring(valueMessageIndex));
+                        }
+                        if(Message.toString().startsWith("ERROR_CREATE"))
+                        {
+                            view.getCreateView().getCreateStatusLabel().setText("ERROR_CREATE:" + Message.toString().substring(valueMessageIndex));
+                        }
+                        if(Message.toString().startsWith("CREATE_SUCCESS"))
+                        {
+                            view.getLoginView().getLoginStatusLabel().setText("NEW USER CREATED, YOU MAY NOW LOGIN.");
+                            view.getCardLayoutOBJ().show(view.getCardsDeck(),"LOGIN_VIEW");
+                        }
+                        if(Message.toString().startsWith("OUTCOME_COIN"))
+                        {
+                            if(Message.toString().substring(valueMessageIndex).endsWith("heads"))
+                            {
+                                try {
+                                    // get file heads.png from photos directory
+                                    // set label of coin to be outcome
+                                    System.out.println("File Dir: " + System.getProperty("user.dir") + "\\Photos");
+                                    view.getGameplayView().setPicture(new File(System.getProperty("user.dir") + "\\Photos\\" + "heads.png"));
+                                    // Would also need to change Jlabel to reflect change of new picture
+                                    //            view.getGameplayView().getPictureLabel().setIcon();
+                                    view.getGameplayView().setPictureLabel(new ImageIcon(view.getGameplayView().getPicture()));
+                                }
+                                catch (IOException e)
+                                {
+                                    System.out.println("Picture not found: " + e.getMessage());
+                                }
+                            }
+                            else
+                            {
+                                try {
+                                    System.out.println("File Dir: " + System.getProperty("user.dir") + "\\Photos");
+                                    view.getGameplayView().setPicture(new File(System.getProperty("user.dir") + "\\Photos\\" + "tails.png"));
+                                    // Would also need to change Jlabel to reflect change of new picture
+                                    //            view.getGameplayView().getPictureLabel().setIcon();
+                                    view.getGameplayView().setPictureLabel(new ImageIcon(view.getGameplayView().getPicture()));
+                                }
+                                catch (IOException e)
+                                {
+                                    System.out.println("Picture not found: " + e.getMessage());
+                                }
+                            }
+                            view.getGameplayView().getTextResult().setText(Message.toString().substring(valueMessageIndex));
+                        }
+                        if(Message.toString().startsWith("OUTCOME_ROLL"))
+                        {
+                            view.getViewDiceroll().getTextResult().setText(Message.toString().substring(valueMessageIndex));
+                        }
                     }
                 }
 
-
-                //set list data from the j list for updating
-//                try
-//                {
-//                    // using clear, I was able to basically refresh default model contents
-//                    // then get from the Model class and add it to the default list model and use the new dlm to replace the old dlm which is being displayed in the view
-////                dlm.clear();
-////                for(String item : arrayList)
-////                {
-////                    this.dlm.addElement(item);
-////                }
-////                view.setDLM(dlm);
-////                view.setListData(model.getData().toArray(new String[0]));
-//                }
-//                catch (NullPointerException e)
-//                {
-//                    System.out.println("Error " + e.getMessage());
-//                } catch (Exception e) {
-//                    System.out.println("Error" + e.getMessage());
-//                }
-
-
-//            ViewLeaderboard.setDlm(dlm);
-//            view.setListData(LeaderBoardModel.selectUserEarnings().toArray(new String[0]));
-
-//                if(serverResponse.startsWith("LEADERBOARD:"))
-//                {
-//                    System.out.println("Updating Leaderboard: " + );
-//                }
-//                System.out.println("Server response is: " + serverResponse);
-
-                // Plan: Since server will implement game logic, have the photo switch based on if the server comes back as heads or tails,
-                // making changes in the view then happens after processing from server sends information back
-
-                // Idea: Have Response formated like this => "Outcome: heads" or "Error_Login: No Such User Found" or "Error_Create: username not unique"
-//                try {
-//                    System.out.println("File Dir: " + System.getProperty("user.dir") + "\\Photos");
-//                    view.getGameplayView().setPicture(new File(System.getProperty("user.dir") + "\\Photos\\" + "tails.png"));
-//                    // Would also need to change Jlabel to reflect change of new picture
-////            view.getGameplayView().getPictureLabel().setIcon();
-//                    view.getGameplayView().setPictureLabel(new ImageIcon(view.getGameplayView().getPicture()));
-//                }
-//                catch (IOException e)
-//                {
-//                    System.out.println("Picture not found: " + e.getMessage());
-//                }
-//            }
             }
-        } catch (IOException e) {
-            System.out.println("ERROR IO: " + e.getMessage());
-            e.printStackTrace();
         }
-        catch (ClassNotFoundException e) {
+        catch (IOException e)
+        {
+            System.out.println("ERROR IO: " + e.getMessage());
+        }
+        catch (ClassNotFoundException e)
+        {
             System.out.println("Error Class Data Sent From Server : " + e.getMessage());
         }
     }
