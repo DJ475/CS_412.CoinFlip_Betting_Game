@@ -1,10 +1,6 @@
 
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import java.sql.SQLException;
+import javax.swing.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class ViewLeaderboard {
@@ -12,10 +8,12 @@ public class ViewLeaderboard {
     private DefaultListModel<String> dlm = new DefaultListModel();
     private ArrayList<String> arrayList = new ArrayList<>();
 
+    private JButton switchToPlay;
+
     ViewLeaderboard() {
         dlm = new DefaultListModel<>();
         this.topEarnerJlist = new JList(this.dlm);
-
+        this.switchToPlay = new JButton("BACK TO GAME");
     }
 
     public JPanel MakeLeaderboard() {
@@ -23,19 +21,18 @@ public class ViewLeaderboard {
             LeaderBoardModel leaderBoardModel = new LeaderBoardModel();
             JPanel panelContainer = new JPanel();
 
-//        this.dlm.addElement("Miles");
-//        this.dlm.addElement("DJ");
-
             panelContainer.setLayout(new BoxLayout(panelContainer, 1));
             JLabel labelLeaderboard = new JLabel("TOP 3 Players");
             this.topEarnerJlist.setFixedCellWidth(200);
             panelContainer.add(labelLeaderboard, "Center");
             panelContainer.add(this.topEarnerJlist, "Center");
-
+            panelContainer.add(switchToPlay,"CENTER");
 
 
             return panelContainer;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             throw new RuntimeException(e);
         }
     }
@@ -57,12 +54,7 @@ public class ViewLeaderboard {
 
     }
 
-    public void setTopEarnerJlist(String[] newList) {
-        if (newList.length != 0) {
-            this.topEarnerJlist.setListData(newList);
-        } else {
-            System.out.println("List Cannot Be Empty");
-        }
-
+    public void setALSwitchToPlay(ActionListener switchToPlayAL) {
+        this.switchToPlay.addActionListener(switchToPlayAL);
     }
 }
