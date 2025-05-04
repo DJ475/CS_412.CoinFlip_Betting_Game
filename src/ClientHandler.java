@@ -54,9 +54,13 @@ public class ClientHandler implements Runnable {
                             synchronized(usermodelVar)
                             {
                                 GameplayClass gc = new GameplayClass();
-                                System.out.println("Gameplay user is now: " + loggedInUser);
                                 gc.playUserGame(inputValidationVariable,valuesArray, objectOutStreamVar,usermodelVar,loggedInUser);
                             }
+                        }
+                        case "GAMEPLAY_BET_DICE"->
+                        {
+                            DiceGameplayClass dgc = new DiceGameplayClass();
+                            dgc.playUserGame(inputValidationVariable,valuesArray,objectOutStreamVar,usermodelVar,loggedInUser);
                         }
                         case "CREATE_ACCOUNT"->
                         {
@@ -66,7 +70,7 @@ public class ClientHandler implements Runnable {
                             synchronized (usermodelVar)
                             {
                                 UserCreationClass ucc = new UserCreationClass();
-                                ucc.createUser(inputValidationVariable,valuesArray,usermodelVar,u);
+                                ucc.createUser(inputValidationVariable,valuesArray,usermodelVar,u,objectOutStreamVar);
                             }
                         }
                         case "LOGIN_USER"->
@@ -75,11 +79,21 @@ public class ClientHandler implements Runnable {
                             synchronized (usermodelVar)
                             {
                                 UserLoginClass ulc = new UserLoginClass();
-                                ulc.loginUser(inputValidationVariable,valuesArray,usermodelVar, u);
+                                ulc.loginUser(inputValidationVariable,valuesArray,usermodelVar, u,objectOutStreamVar);
                             }
                             this.loggedInUser = u.getUsername();
 
 //                            System.out.println("Logged in user is now: "+ this.loggedInUser);
+
+                        }
+                        case "DISCONNECTED"->
+                        {
+                            synchronized (Server.getUsersLoggedIn())
+                            {
+                                System.out.println("User Disconnected: " + valuesArray[0]);
+                                System.out.println("Server Logged in users is now: " + Server.getUsersLoggedIn());
+                                Server.getUsersLoggedIn().remove(valuesArray[0]);
+                            }
 
                         }
                         case "LEADERBOARD"->
@@ -105,7 +119,6 @@ public class ClientHandler implements Runnable {
             System.out.println("Class not found: " + e.getMessage());
         } catch (SQLException e) {
             System.out.println("Error SQL: "+ e.getMessage());
-//            prwBack.println("Error In Creating User, Please make sure Usernames are unique,Contain Alphabetic Characters and Numbers, Symbols are also optional");
         }
     }
 }
