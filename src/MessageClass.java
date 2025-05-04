@@ -2,19 +2,19 @@ import java.io.Serializable;
 
 public class MessageClass implements Serializable {
     private String action;
-    private String errorMessage;
+    private String stringMessage;
 
     public MessageClass() {
     }
 
-    public MessageClass(String action, String errorMessage) {
+    public MessageClass(String action, String message) {
         this.action = action;
-        this.errorMessage = errorMessage;
+        this.stringMessage = message;
     }
 
 
     @Override
     public String toString() {
-        return String.format("%s::::%s",action,errorMessage);
+        return String.format("%s::::%s",action,stringMessage);
     }
 }
