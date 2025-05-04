@@ -1,37 +1,33 @@
-import javax.swing.JFrame;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.WindowAdapter;
 
 public class View {
     private JFrame frameMain = new JFrame();
-    private JTabbedPane jtabs = new JTabbedPane();
+    private CardLayout cardLayoutOBJ = new CardLayout();
+    private JPanel cardsDeck = new JPanel(cardLayoutOBJ);
+
+    //    private JTabbedPane jtabs = new JTabbedPane();
     private ViewLeaderboard leaderBoardView = new ViewLeaderboard();
     private ViewGameplay gameplayView = new ViewGameplay();
     private ViewCreate createView = new ViewCreate();
     private ViewLogin loginView = new ViewLogin();
     private ViewDiceroll viewDiceroll = new ViewDiceroll();
 
-    public View()
-    {
-
-    }
-
+    // Source: https://web.mit.edu/javadev/doc/tutorial/ui/layout/card.html
+    // Source: https://www.sarthaks.com/3507672/how-do-i-switch-between-cards-using-cardlayout
+    // Using this source we were able to dynamically show different cards based on actions
+    // The card layout works by having multiple views within a JPanel parent that can call aliases like CREATE_VIEW
+    // which then shows what view is associated with that alias.
     public void InitializeUI() {
-        this.jtabs.add("Play Coin flip", this.gameplayView.MakeGameplay());
-        this.jtabs.add("Play Dice", this.viewDiceroll.MakeDiceroll());
-        this.jtabs.add("Leaderboard", this.leaderBoardView.MakeLeaderboard());
-        this.jtabs.add("Create", this.createView.MakeCreate());
-        this.jtabs.add("Login", this.loginView.MakeLogin());
-        this.frameMain.add(this.jtabs);
+        cardsDeck.add(loginView.MakeLogin(),"LOGIN_VIEW");
+        cardsDeck.add(createView.MakeCreate(),"CREATE_VIEW");
+        cardsDeck.add(gameplayView.MakeGameplay(),"COINFLIP_VIEW");
+        cardsDeck.add(viewDiceroll.MakeDiceroll(),"DICEROLL_VIEW");
+        cardsDeck.add(leaderBoardView.MakeLeaderboard(),"LEADER_VIEW");
+        this.frameMain.add(cardsDeck);
         this.frameMain.setSize(600, 600);
         this.frameMain.setVisible(true);
-        jtabs.setSelectedIndex(3);
-        jtabs.setEnabledAt(0,false);
-        jtabs.setEnabledAt(1,false);
-
-    }
-
-    public JTabbedPane getJtabs() {
-        return jtabs;
     }
 
     public ViewLeaderboard getLeaderBoardView() {
@@ -53,5 +49,19 @@ public class View {
     public ViewCreate getCreateView() {
         return this.createView;
     }
+
+    public CardLayout getCardLayoutOBJ() {
+        return cardLayoutOBJ;
+    }
+
+    public JPanel getCardsDeck() {
+        return cardsDeck;
+    }
+
+    public void setWindowListener(WindowAdapter wa)
+    {
+        frameMain.addWindowListener(wa);
+    }
+
 }
 
