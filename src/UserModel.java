@@ -57,7 +57,6 @@ public class UserModel {
     public String selectUserEarnings(String username) throws SQLException {
         String selectUserEarnings = "SELECT earnings FROM User WHERE username = ? LIMIT 1;";
         PreparedStatement stmntSelect = conn.prepareStatement(selectUserEarnings);
-        System.out.println("Username passed int function is now: " + username);
         stmntSelect.setString(1,username);
         ResultSet rsSelect = stmntSelect.executeQuery();
         if(rsSelect.next())
