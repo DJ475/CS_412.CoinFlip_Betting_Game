@@ -1,6 +1,4 @@
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.TextField;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -17,18 +15,17 @@ import javax.swing.event.ListSelectionListener;
 
 public class ViewGameplay {
     private JButton buttonBet = new JButton("Place Bet Now");
+    private JButton buttonChangeGame;
     private BufferedImage picture;
-    TextField textFBetAmount;
-    TextField textResult;
-    TextField textEarnings;
-    JLabel pictureLabel;
+    private TextField textFBetAmount;
+    private TextField textResult;
+    private TextField textEarnings;
+    private JLabel pictureLabel;
+
+    private JButton buttonSeeLeaderboard;
 
     private final String[] head_tailsOptions = new String[]{"heads", "tails"};
     JList<String> betOptionsSelect;
-
-    public TextField getTextFBetAmount() {
-        return this.textFBetAmount;
-    }
 
     ViewGameplay() {
         try {
@@ -45,6 +42,8 @@ public class ViewGameplay {
         this.textFBetAmount = new TextField(15);
         this.textResult = new TextField(15);
         this.textEarnings = new TextField(15);
+        this.buttonChangeGame = new JButton("Play DICEROLL?");
+        this.buttonSeeLeaderboard = new JButton("SEE LEADERBOARD");
     }
 
     public JPanel MakeGameplay() {
@@ -79,6 +78,12 @@ public class ViewGameplay {
         Component spaceAreaVert2 = Box.createRigidArea(new Dimension(20, 10));
         outcomePanel.add(spaceAreaVert2);
         outcomePanel.add(this.textEarnings);
+        Component spaceAreaVert4 = Box.createRigidArea(new Dimension(20, 10));
+        outcomePanel.add(spaceAreaVert4);
+        outcomePanel.add(buttonChangeGame, BorderLayout.CENTER);
+        Component spaceAreaVert5 = Box.createRigidArea(new Dimension(20, 10));
+        outcomePanel.add(spaceAreaVert5);
+        outcomePanel.add(buttonSeeLeaderboard,BorderLayout.CENTER);
         this.buttonBet.setPreferredSize(new Dimension(250, 50));
         buttonPanel.add(this.buttonBet, "South");
         panelContainer.add(betPanel, "West");
@@ -118,7 +123,35 @@ public class ViewGameplay {
         betOptionsSelect.addListSelectionListener(alOptions);
     }
 
+    public TextField getTextFBetAmount() {
+        return this.textFBetAmount;
+    }
+
     public void setActionListenerButtonBet(ActionListener al) {
         this.buttonBet.addActionListener(al);
     }
+
+    public TextField getTextResult() {
+        return textResult;
+    }
+
+    public TextField getTextEarnings() {
+        return textEarnings;
+    }
+
+    public void setActionListenerChangeGame(ActionListener alChangeGame) {
+        this.buttonChangeGame.addActionListener(alChangeGame);
+    }
+
+    public void setALButtonSeeLeaderboard(ActionListener alLeaderboard) {
+        this.buttonSeeLeaderboard.addActionListener(alLeaderboard);
+    }
+
+    public void clearText()
+    {
+        this.textFBetAmount.setText("");
+        this.textResult.setText("");
+        this.textEarnings.setText("");
+    }
 }
+
