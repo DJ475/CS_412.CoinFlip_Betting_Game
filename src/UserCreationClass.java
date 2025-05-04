@@ -1,7 +1,9 @@
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 
 public class UserCreationClass {
-    public void createUser(InputValidation inputValidationVariable, String[] valuesArray, UserModel userModelVar, User u) throws SQLException {
+    public void createUser(InputValidation inputValidationVariable, String[] valuesArray, UserModel userModelVar, User u, ObjectOutputStream objectOutStreamVar) throws SQLException, IOException {
         System.out.println("Creating Account Now");
         inputValidationVariable.setUsernameCreate(valuesArray[0]);
         inputValidationVariable.setPasswordCreate(valuesArray[1]);
@@ -18,13 +20,23 @@ public class UserCreationClass {
                 {
                     userModelVar.insertUserTable(u);
                 }
-            } catch (SQLException e) {
-                System.out.println("ERROR When Creating New User: " + e.getMessage());
+                objectOutStreamVar.writeObject(new MessageClass("CREATE_SUCCESS","NEW USER CREATED, YOU MAY NOW LOGIN."));
+            }
+            catch (SQLException e)
+            {
+                if(e.getMessage().contains("[SQLITE_CONSTRAINT_UNIQUE]"))
+                {
+                    objectOutStreamVar.writeObject(new MessageClass("ERROR_CREATE","USERNAME MUST BE UNIQUE"));
+                }
+                else
+                {
+                    objectOutStreamVar.writeObject(new MessageClass("ERROR_CREATE",e.getMessage()));
+                }
             }
         }
         else
         {
-            System.out.println("User input invalid");
+            objectOutStreamVar.writeObject(new MessageClass("ERROR_CREATE","User Input Invalid"));
         }
     }
 }
