@@ -9,7 +9,7 @@ public class UserCreationClass {
         inputValidationVariable.setPasswordCreate(valuesArray[1]);
         if(inputValidationVariable.ValidateCreateCreds())
         {
-            u = new User(valuesArray[0],valuesArray[1], 0.00);
+            u = new User(valuesArray[0],valuesArray[1], 0);
 
 //                                System.out.println("New user is: " + valuesArray[0]);
 //                                System.out.println("Password is: " + valuesArray[1]);
