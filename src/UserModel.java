@@ -17,7 +17,7 @@ public class UserModel {
                 "id INTEGER PRIMARY KEY," +
                 "username VARCHAR UNIQUE NOT NULL," +
                 "password VARCHAR NOT NULL," +
-                "earnings REAL NOT NULL" +
+                "earnings INTEGER NOT NULL" +
                 ");";
         PreparedStatement statementPrep = conn.prepareStatement(createTable);
         statementPrep.execute();
@@ -34,7 +34,7 @@ public class UserModel {
         statement.executeUpdate();
     }
 
-    public void updateUserTable(String username,double earnings) throws SQLException {
+    public void updateUserTable(String username,int earnings) throws SQLException {
         String selectUserEarnings = "SELECT earnings FROM User WHERE username = ? LIMIT 1;";
         PreparedStatement stmntSelectEarnings = conn.prepareStatement(selectUserEarnings);
         stmntSelectEarnings.setString(1,username);
@@ -42,9 +42,9 @@ public class UserModel {
         if(rsEarningsUser.next())
         {
             // get earnings for user
-            double earningsDB = rsEarningsUser.getDouble("earnings");
+            int earningsDB = rsEarningsUser.getInt("earnings");
             // update thier earnings in database with bet amount(this can be positive or negative, depending on if they guessed correctly)
-            double updatedEarnings = earningsDB+earnings;
+            int updatedEarnings = earningsDB+earnings;
             String updateString = "UPDATE User SET earnings = ? WHERE username = ?;";
             PreparedStatement stmntUpdate = conn.prepareStatement(updateString);
             stmntUpdate.setDouble(1,updatedEarnings);
