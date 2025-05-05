@@ -64,7 +64,7 @@ public class ClientHandler implements Runnable {
                         }
                         case "CREATE_ACCOUNT"->
                         {
-                            User u = new User(valuesArray[0],valuesArray[1], 0.00);
+                            User u = new User(valuesArray[0],valuesArray[1], 0);
                             String username = u.getUsername();
 
                             synchronized (usermodelVar)
@@ -75,7 +75,7 @@ public class ClientHandler implements Runnable {
                         }
                         case "LOGIN_USER"->
                         {
-                            User u = new User(valuesArray[0],valuesArray[1], 0.00);
+                            User u = new User(valuesArray[0],valuesArray[1], 0);
                             synchronized (usermodelVar)
                             {
                                 UserLoginClass ulc = new UserLoginClass();
