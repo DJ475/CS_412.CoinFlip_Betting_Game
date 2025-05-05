@@ -125,36 +125,6 @@ public class ClientListener implements Runnable {
                         }
                         if(Message.toString().startsWith("OUTCOME_COIN"))
                         {
-                            if(Message.toString().substring(valueMessageIndex).endsWith("heads"))
-                            {
-                                try {
-                                    // get file heads.png from photos directory
-                                    // set label of coin to be outcome
-                                    System.out.println("File Dir: " + System.getProperty("user.dir") + "\\Photos");
-                                    view.getGameplayView().setPicture(new File(System.getProperty("user.dir") + "\\Photos\\" + "heads.png"));
-                                    // Would also need to change Jlabel to reflect change of new picture
-                                    //            view.getGameplayView().getPictureLabel().setIcon();
-                                    view.getGameplayView().setPictureLabel(new ImageIcon(view.getGameplayView().getPicture()));
-                                }
-                                catch (IOException e)
-                                {
-                                    System.out.println("Picture not found: " + e.getMessage());
-                                }
-                            }
-                            else
-                            {
-                                try {
-                                    System.out.println("File Dir: " + System.getProperty("user.dir") + "\\Photos");
-                                    view.getGameplayView().setPicture(new File(System.getProperty("user.dir") + "\\Photos\\" + "tails.png"));
-                                    // Would also need to change Jlabel to reflect change of new picture
-                                    //            view.getGameplayView().getPictureLabel().setIcon();
-                                    view.getGameplayView().setPictureLabel(new ImageIcon(view.getGameplayView().getPicture()));
-                                }
-                                catch (IOException e)
-                                {
-                                    System.out.println("Picture not found: " + e.getMessage());
-                                }
-                            }
                             view.getGameplayView().getTextResult().setText(Message.toString().substring(valueMessageIndex));
                         }
                         if(Message.toString().startsWith("OUTCOME_ROLL"))
@@ -163,7 +133,6 @@ public class ClientListener implements Runnable {
                         }
                     }
                 }
-
             }
         }
         catch (IOException e)
