@@ -23,7 +23,7 @@ public class GameplayClass {
                     objWrBack.writeObject(new MessageClass("OUTCOME_COIN","Guessed Correctly, Its " + resultFlip));
                     synchronized (usermodelVar)
                     {
-                        usermodelVar.updateUserTable(loggedInUser, Double.parseDouble(betAmount));
+                        usermodelVar.updateUserTable(loggedInUser, Integer.parseInt(betAmount));
                     }
                 }
                 else
@@ -31,8 +31,8 @@ public class GameplayClass {
                     objWrBack.writeObject(new MessageClass("OUTCOME_COIN","Guess Incorrect, It Was " + resultFlip));
                     synchronized (usermodelVar)
                     {
-                        double doubleValue = Double.parseDouble(betAmount);
-                        usermodelVar.updateUserTable(loggedInUser, -doubleValue);
+                        int intEarningsValue = Integer.parseInt(betAmount);
+                        usermodelVar.updateUserTable(loggedInUser, -intEarningsValue);
                     }
                 }
 
