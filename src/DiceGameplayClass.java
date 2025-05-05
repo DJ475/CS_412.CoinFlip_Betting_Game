@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 
 public class DiceGameplayClass {
@@ -23,7 +22,7 @@ public class DiceGameplayClass {
                     objectOutputStream.writeObject(new MessageClass("OUTCOME_ROLL","Guessed Correctly, Its " + resultRoll));
                     synchronized (usermodelVar)
                     {
-                        usermodelVar.updateUserTable(loggedInUser, Double.parseDouble(betAmount));
+                        usermodelVar.updateUserTable(loggedInUser, Integer.parseInt(betAmount));
                     }
                 }
                 else
@@ -32,8 +31,8 @@ public class DiceGameplayClass {
                     objectOutputStream.writeObject(new MessageClass("OUTCOME_ROLL","Guess Incorrect, It Was " + resultRoll));
                     synchronized (usermodelVar)
                     {
-                        double doubleValue = Double.parseDouble(betAmount);
-                        usermodelVar.updateUserTable(loggedInUser, -doubleValue);
+                        int intEarningsValue = Integer.parseInt(betAmount);
+                        usermodelVar.updateUserTable(loggedInUser, -intEarningsValue);
                     }
                 }
 
