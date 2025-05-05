@@ -63,8 +63,8 @@ public class InputValidation {
 
     public void setBetAmount(String betAmount) {
         // Source: https://www.demo2s.com/g/java/how-to-use-regex-pattern-to-match-positive-and-negative-number-values-in-a-string-in-java.html
-        // Using this source we were able to use it to only allow positive Integers/Decimals numbers for the bet amount field
-        if(betAmount.matches("\\d+\\.?\\d*") && !betAmount.isBlank())
+        // Using this source we were able to use it to only allow positive Integers numbers for the bet amount field
+        if(betAmount.matches("\\d+") && !betAmount.isBlank() && !betAmount.equals("0"))
         {
             this.betAmount = betAmount;
         }
