@@ -3,10 +3,10 @@ import org.mindrot.jbcrypt.BCrypt;
 public class User {
     private String username;
     private String password;
-    private double earnings;
+    private int earnings;
 
 
-    public User(String username, String password, double earnings) {
+    public User(String username, String password, int earnings) {
         this.username = username;
         this.password = password;
         this.earnings = earnings;
@@ -20,7 +20,7 @@ public class User {
         return password;
     }
 
-    public double getEarnings() {
+    public int getEarnings() {
         return earnings;
     }
 
@@ -29,7 +29,7 @@ public class User {
         return BCrypt.hashpw(password,BCrypt.gensalt());
     }
 
-    public void updateEarningsUser(double betAmount) {
+    public void updateEarningsUser(int betAmount) {
         this.earnings += betAmount;
     }
 }
