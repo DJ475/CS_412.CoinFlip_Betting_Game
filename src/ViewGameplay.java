@@ -28,17 +28,6 @@ public class ViewGameplay {
     JList<String> betOptionsSelect;
 
     ViewGameplay() {
-//        try {
-//            // Source: https://stackoverflow.com/questions/4871051/how-to-get-the-current-working-directory-in-java
-//            //  System.getProperty("user.dir") allows the retrieving of the current working
-//            //  directory path.
-//            //  Setting Default image to be heads inside jlabel
-//            System.out.println("Path is: " + System.getProperty("user.dir") + "\\Photos\\" + "heads.png");
-//            this.picture = ImageIO.read(new File(System.getProperty("user.dir") + "\\Photos\\" + "heads.png"));
-//        } catch (Exception var2) {
-//            System.out.println("Picture Not Found");
-//        }
-
         this.textFBetAmount = new TextField(15);
         this.textResult = new TextField(15);
         this.textEarnings = new TextField(15);
