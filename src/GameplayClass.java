@@ -23,7 +23,14 @@ public class GameplayClass {
                     objWrBack.writeObject(new MessageClass("OUTCOME_COIN","Guessed Correctly, Its " + resultFlip));
                     synchronized (usermodelVar)
                     {
-                        usermodelVar.updateUserTable(loggedInUser, Integer.parseInt(betAmount));
+                        try
+                        {
+                            usermodelVar.updateUserTable(loggedInUser, Integer.parseInt(betAmount));
+                        }
+                        catch (NumberFormatException e)
+                        {
+                            objWrBack.writeObject(new MessageClass("ERROR_INPUT_COIN",e.getMessage()));
+                        }
                     }
                 }
                 else
@@ -31,8 +38,27 @@ public class GameplayClass {
                     objWrBack.writeObject(new MessageClass("OUTCOME_COIN","Guess Incorrect, It Was " + resultFlip));
                     synchronized (usermodelVar)
                     {
-                        int intEarningsValue = Integer.parseInt(betAmount);
-                        usermodelVar.updateUserTable(loggedInUser, -intEarningsValue);
+                        try
+                        {
+                            int intEarningsValue = Integer.parseInt(betAmount);
+                            // limit amount they can bet each time to be an int
+                            if(intEarningsValue > 999999999)
+                            {
+                                objWrBack.writeObject(new MessageClass("ERROR_INPUT_COIN","INPUT TOO LARGE TO BET, Must Be Less Than 999999999"));
+                            }
+                            else
+                            {
+                                usermodelVar.updateUserTable(loggedInUser, -intEarningsValue);
+                            }
+                        }
+                        catch (NumberFormatException e)
+                        {
+                            objWrBack.writeObject(new MessageClass("ERROR_INPUT_COIN","INPUT IS INVALID(MUST Be <= 999999999)"));
+                        }
+                        catch (SQLException e)
+                        {
+                            objWrBack.writeObject(new MessageClass("ERROR_SQL_COIN",e.getMessage()));
+                        }
                     }
                 }
 
