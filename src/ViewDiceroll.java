@@ -28,16 +28,6 @@ public class ViewDiceroll {
     private JButton buttonSeeLeaderboard;
 
     ViewDiceroll() {
-//        try {
-//            //  System.getProperty("user.dir") allows the retrieving of the current working
-//            //  directory path.
-//            //  Setting Default image to be heads inside jlabel
-//            System.out.println("Path is: " + System.getProperty("user.dir") + "\\Photos\\" + "dice.png");
-//            this.picture = ImageIO.read(new File(System.getProperty("user.dir") + "\\Photos\\" + "dice.png"));
-//        } catch (Exception var2) {
-//            System.out.println("Picture Not Found");
-//        }
-
         this.textFBetAmount = new TextField(15);
         this.textResult = new TextField(15);
         this.textEarnings = new TextField(15);
