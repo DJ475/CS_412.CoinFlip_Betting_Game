@@ -131,6 +131,22 @@ public class ClientListener implements Runnable {
                         {
                             view.getViewDiceroll().getTextResult().setText(Message.toString().substring(valueMessageIndex));
                         }
+                        if(Message.toString().startsWith("ERROR_INPUT_COIN"))
+                        {
+                            view.getGameplayView().getTextResult().setText(Message.toString().substring(valueMessageIndex));
+                        }
+                        if(Message.toString().startsWith("ERROR_SQL_COIN"))
+                        {
+                            view.getGameplayView().getTextResult().setText(Message.toString().substring(valueMessageIndex));
+                        }
+                        if(Message.toString().startsWith("ERROR_INPUT_DICE"))
+                        {
+                            view.getViewDiceroll().getTextResult().setText(Message.toString().substring(valueMessageIndex));
+                        }
+                        if(Message.toString().startsWith("ERROR_SQL_DICE"))
+                        {
+                            view.getViewDiceroll().getTextResult().setText(Message.toString().substring(valueMessageIndex));
+                        }
                     }
                 }
             }
