@@ -22,7 +22,13 @@ public class DiceGameplayClass {
                     objectOutputStream.writeObject(new MessageClass("OUTCOME_ROLL","Guessed Correctly, Its " + resultRoll));
                     synchronized (usermodelVar)
                     {
-                        usermodelVar.updateUserTable(loggedInUser, Integer.parseInt(betAmount));
+                        try {
+                            usermodelVar.updateUserTable(loggedInUser, Integer.parseInt(betAmount));
+                        } catch (SQLException e) {
+                            objectOutputStream.writeObject(new MessageClass("ERROR_SQL_DICE",e.getMessage()));
+                        } catch (NumberFormatException e) {
+                            objectOutputStream.writeObject(new MessageClass("ERROR_INPUT_DICE","INPUT VALIDATION FAILED"));
+                        }
                     }
                 }
                 else
@@ -31,8 +37,26 @@ public class DiceGameplayClass {
                     objectOutputStream.writeObject(new MessageClass("OUTCOME_ROLL","Guess Incorrect, It Was " + resultRoll));
                     synchronized (usermodelVar)
                     {
-                        int intEarningsValue = Integer.parseInt(betAmount);
-                        usermodelVar.updateUserTable(loggedInUser, -intEarningsValue);
+                        try
+                        {
+                            int intEarningsValue = Integer.parseInt(betAmount);
+                            if(intEarningsValue > 999999999)
+                            {
+                                objectOutputStream.writeObject(new MessageClass("ERROR_INPUT_DICE","INPUT NEEDS to be less than 999999999"));
+                            }
+                            else
+                            {
+                                usermodelVar.updateUserTable(loggedInUser, -intEarningsValue);
+                            }
+                        }
+                        catch (NumberFormatException e)
+                        {
+                            objectOutputStream.writeObject(new MessageClass("ERROR_INPUT_DICE","INPUT IS INVALID(MUST Be <= 999999999)"));
+                        }
+                        catch (SQLException e)
+                        {
+                            objectOutputStream.writeObject(new MessageClass("ERROR_SQL_DICE",e.getMessage()));
+                        }
                     }
                 }
 
