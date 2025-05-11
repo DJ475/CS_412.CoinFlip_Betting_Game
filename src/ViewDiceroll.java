@@ -28,15 +28,15 @@ public class ViewDiceroll {
     private JButton buttonSeeLeaderboard;
 
     ViewDiceroll() {
-        try {
-            //  System.getProperty("user.dir") allows the retrieving of the current working
-            //  directory path.
-            //  Setting Default image to be heads inside jlabel
-            System.out.println("Path is: " + System.getProperty("user.dir") + "\\Photos\\" + "dice.png");
-            this.picture = ImageIO.read(new File(System.getProperty("user.dir") + "\\Photos\\" + "dice.png"));
-        } catch (Exception var2) {
-            System.out.println("Picture Not Found");
-        }
+//        try {
+//            //  System.getProperty("user.dir") allows the retrieving of the current working
+//            //  directory path.
+//            //  Setting Default image to be heads inside jlabel
+//            System.out.println("Path is: " + System.getProperty("user.dir") + "\\Photos\\" + "dice.png");
+//            this.picture = ImageIO.read(new File(System.getProperty("user.dir") + "\\Photos\\" + "dice.png"));
+//        } catch (Exception var2) {
+//            System.out.println("Picture Not Found");
+//        }
 
         this.textFBetAmount = new TextField(15);
         this.textResult = new TextField(15);
@@ -63,14 +63,14 @@ public class ViewDiceroll {
         betPanel.add(betOptionsSelect, "South");
         try
         {
-            this.pictureLabel = new JLabel(new ImageIcon(picture));
+//            this.pictureLabel = new JLabel(new ImageIcon(picture));
         }
         catch (Exception e)
         {
             System.out.println("Image Icon Not Found: " + e.getMessage());
             this.pictureLabel = new JLabel("Image Not Found ");
         }
-        outcomePanel.add(this.pictureLabel);
+//        outcomePanel.add(this.pictureLabel);
         Component spaceAreaVert3 = Box.createRigidArea(new Dimension(20, 10));
         outcomePanel.add(spaceAreaVert3);
         outcomePanel.add(this.textResult);
